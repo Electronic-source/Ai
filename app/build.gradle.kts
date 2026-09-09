@@ -14,7 +14,7 @@ val localProperties = Properties().apply {
 
 android {
     namespace = "com.electronicsource.ai"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.electronicsource.ai"
