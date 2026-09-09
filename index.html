@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Returning to Ai…</title>
+</head>
+<body>
+  <p>Returning to the Ai app…</p>
+  <script>
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const allowed = new URLSearchParams();
+      for (const key of ["code", "state", "error", "error_description"]) {
+        const value = params.get(key);
+        if (value !== null) allowed.set(key, value);
+      }
+      const target = "gitmate://oauth/callback" + (allowed.toString() ? "?" + allowed.toString() : "");
+      window.location.replace(target);
+    })();
+  </script>
+</body>
+</html>

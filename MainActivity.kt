@@ -31,6 +31,7 @@ data class WorkspaceFile(val name: String, val content: String)
 
 class MainActivity : ComponentActivity() {
     private var pendingExport: File? = null
+    private var githubStatus by mutableStateOf(if (GitHubAuth.hasToken(this)) "GitHub متصل است." else "GitHub متصل نیست.")
 
     private val createFileLauncher =
         registerForActivityResult(ActivityResultContracts.CreateDocument("*/*")) { uri ->
@@ -46,8 +47,18 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        handleGitHubIntent(intent)
         setContent {
             AiApp(
+                githubStatus = githubStatus,
+                onConnectGitHub = {
+                    githubStatus = "در حال بازکردن GitHub..."
+                    GitHubAuth.start(this)
+                },
+                onDisconnectGitHub = {
+                    GitHubAuth.clear(this)
+                    githubStatus = "GitHub متصل نیست."
+                },
                 onExportFile = { file ->
                     pendingExport = file
                     createFileLauncher.launch(file.name)
@@ -55,10 +66,35 @@ class MainActivity : ComponentActivity() {
             )
         }
     }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleGitHubIntent(intent)
+    }
+
+    private fun handleGitHubIntent(intent: Intent?) {
+        if (intent == null) return
+        GitHubAuth.handleIntent(this, intent) { result ->
+            runOnUiThread {
+                githubStatus = when (result) {
+                    is GitHubAuth.Result.Success -> "GitHub با موفقیت متصل شد."
+                    is GitHubAuth.Result.Error -> result.message
+                }
+                if (result is GitHubAuth.Result.Error) {
+                    Toast.makeText(this, result.message, Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
 }
 
 @Composable
-fun AiApp(onExportFile: (File) -> Unit) {
+fun AiApp(
+    githubStatus: String,
+    onConnectGitHub: () -> Unit,
+    onDisconnectGitHub: () -> Unit,
+    onExportFile: (File) -> Unit
+) {
     var tab by remember { mutableIntStateOf(0) }
 
     MaterialTheme(
@@ -83,7 +119,7 @@ fun AiApp(onExportFile: (File) -> Unit) {
                 0 -> ChatScreen(Modifier.padding(padding))
                 1 -> CoderScreen(Modifier.padding(padding))
                 2 -> FilesScreen(Modifier.padding(padding), onExportFile)
-                else -> GitHubScreen(Modifier.padding(padding))
+                else -> GitHubScreen(Modifier.padding(padding), githubStatus, onConnectGitHub, onDisconnectGitHub)
             }
         }
     }
@@ -284,7 +320,12 @@ fun FilesScreen(
 }
 
 @Composable
-fun GitHubScreen(modifier: Modifier = Modifier) {
+fun GitHubScreen(
+    modifier: Modifier = Modifier,
+    status: String,
+    onConnect: () -> Unit,
+    onDisconnect: () -> Unit
+) {
     val features = listOf(
         "نمایش Repositoryها",
         "خواندن و ویرایش فایل‌ها",
@@ -303,12 +344,13 @@ fun GitHubScreen(modifier: Modifier = Modifier) {
             Column(Modifier.padding(18.dp)) {
                 Text("GitHub Account", fontWeight = FontWeight.Bold)
                 Spacer(Modifier.height(8.dp))
-                Text(
-                    "اتصال واقعی با GitHub App و OAuth/PKCE در مرحله بعد فعال می‌شود.",
-                    color = Color.LightGray
-                )
+                Text(status, color = Color.LightGray)
                 Spacer(Modifier.height(16.dp))
-                Button(onClick = {}) { Text("اتصال GitHub") }
+                if (status.contains("متصل") && !status.contains("نیست")) {
+                    OutlinedButton(onClick = onDisconnect) { Text("قطع اتصال") }
+                } else {
+                    Button(onClick = onConnect) { Text("اتصال GitHub") }
+                }
             }
         }
         Spacer(Modifier.height(18.dp))
