@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Returning to Ai…</title>
+</head>
+<body>
+    <p>Returning to Ai…</p>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+
+        const code = params.get("code");
+        const state = params.get("state");
+        const error = params.get("error");
+        const errorDescription = params.get("error_description");
+
+        const callback = new URL("gitmate://oauth/callback");
+
+        if (code) callback.searchParams.set("code", code);
+        if (state) callback.searchParams.set("state", state);
+        if (error) callback.searchParams.set("error", error);
+        if (errorDescription) {
+            callback.searchParams.set("error_description", errorDescription);
+        }
+
+        window.location.href = callback.toString();
+    </script>
+</body>
+</html>
