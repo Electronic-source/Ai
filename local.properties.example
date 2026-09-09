@@ -1,3 +1,3 @@
-# Copy this file to local.properties and replace the value with your GitHub App Client Secret.
-# NEVER commit local.properties to GitHub.
+# Copy this file to local.properties for local builds.
+# Never commit local.properties.
 GITHUB_CLIENT_SECRET=PASTE_YOUR_GITHUB_CLIENT_SECRET_HERE
