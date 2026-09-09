@@ -36,7 +36,7 @@ jobs:
 
       - name: Create local.properties
         env:
-          GITHUB_CLIENT_SECRET: ${{ secrets.GITHUB_CLIENT_SECRET }}
+          GITHUB_CLIENT_SECRET: ${{ secrets.AI_GITHUB_CLIENT_SECRET }}
         shell: bash
         run: |
           if [ -z "$GITHUB_CLIENT_SECRET" ]; then
