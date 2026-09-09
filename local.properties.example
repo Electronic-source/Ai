@@ -1,3 +1,4 @@
-# Copy this file to local.properties for local builds.
-# Never commit local.properties.
+# Local GitHub App configuration.
+# NEVER commit the real local.properties file.
+
 GITHUB_CLIENT_SECRET=PASTE_YOUR_GITHUB_CLIENT_SECRET_HERE
