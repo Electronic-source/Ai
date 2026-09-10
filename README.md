@@ -24,7 +24,7 @@ The workflow is `.github/workflows/build-apk.yml`.
 
 Before running it, create a repository Actions secret named:
 
-`GITHUB_CLIENT_SECRET`
+`AI_GITHUB_CLIENT_SECRET`
 
 The workflow creates `local.properties` only on the runner, builds `app-debug.apk`, and uploads it as the `Ai-debug-apk` artifact.
 

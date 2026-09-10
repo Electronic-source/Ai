@@ -47,7 +47,8 @@ object GitHubAuth {
             .appendQueryParameter("state", state)
             .appendQueryParameter("code_challenge", codeChallenge)
             .appendQueryParameter("code_challenge_method", "S256")
-            .appendQueryParameter("prompt", "select_account")
+            // Full repo access: browse repos, read/write files, branches, commits, PRs.
+            .appendQueryParameter("scope", "repo")
             .build()
 
         val intent = Intent(Intent.ACTION_VIEW, uri)
