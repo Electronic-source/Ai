@@ -124,7 +124,7 @@ export default function Landing() {
                 <div className="fc-label"><Ico name="exam" size={12} /> {t('exams_title')} · {t(`level_high`)}</div>
                 <div className="fc-q">{pick(demoQuestion.q)}</div>
                 <div className="fc-opts">
-                  {demoQuestion.opts.slice(0, 3).map((o, i) => (
+                  {demoQuestion.opts.map((o, i) => (
                     <span key={i} className={`fc-opt ${i === demoQuestion.a ? 'ok' : ''}`}>
                       <b>{String.fromCharCode(65 + i)}</b> {pick(o)}
                     </span>
