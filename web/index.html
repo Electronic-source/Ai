@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#06070d" />
+    <meta name="description" content="درسا — آکادمی جهانی آموزش: درس، امتحان و گروه‌های مطالعه برای همه مقاطع، همه کشورها و همه زبان‌ها." />
+    <meta property="og:title" content="درسا · Darsa — Global Learning Academy" />
+    <meta property="og:description" content="One academy for every curriculum on Earth: lessons, national-format exams and study groups in 14 languages." />
+    <title>درسا · Darsa — Global Learning Academy</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%237cf6c4'/%3E%3Cstop offset='.55' stop-color='%238b7cff'/%3E%3Cstop offset='1' stop-color='%23ff8a5b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='%23090b14'/%3E%3Cpath d='M32 12 54 22 32 32 10 22z' fill='url(%23g)'/%3E%3Cpath d='M18 28v12c0 5 6 9 14 9s14-4 14-9V28' fill='none' stroke='url(%23g)' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E" />
+    <style>
+      html { background: #05070e; }
+      .boot {
+        position: fixed; inset: 0; display: grid; place-items: center;
+        background: radial-gradient(900px 600px at 70% 10%, rgba(124,246,196,.12), transparent 60%), #05070e;
+        color: #7cf6c4; font-family: system-ui, sans-serif; letter-spacing: .3em; font-size: 12px;
+        transition: opacity .5s ease; z-index: 9999;
+      }
+      .boot.gone { opacity: 0; pointer-events: none; }
+    </style>
+    <script>
+      /* set direction and language before paint so the first frame is not mirrored */
+      (function () {
+        try {
+          var saved = JSON.parse(localStorage.getItem('darsa:v1') || '{}');
+          var lang = saved.lang || 'fa';
+          var rtl = lang === 'fa' || lang === 'ar';
+          document.documentElement.lang = lang;
+          document.documentElement.dir = rtl ? 'rtl' : 'ltr';
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <div class="boot" id="boot" aria-hidden="true">درسا · DARSA</div>
+    <script type="module" src="/src/main.jsx"></script>
+    <script>
+      window.addEventListener('load', function () {
+        var b = document.getElementById('boot');
+        if (!b) return;
+        setTimeout(function () { b.classList.add('gone'); setTimeout(function () { b.remove(); }, 600); }, 120);
+      });
+    </script>
+  </body>
+</html>

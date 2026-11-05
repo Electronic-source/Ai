@@ -6,3 +6,7 @@ local.properties
 /captures/
 .externalNativeBuild/
 .cxx/
+
+# web app
+web/node_modules/
+web/dist/
